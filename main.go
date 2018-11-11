@@ -4,20 +4,19 @@ import (
 	"category/handler"
 	"context"
 	"flag"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/gorilla/mux"
 )
-
-
 
 func main() {
 
 	var wait time.Duration
-	flag.DurationVar(&wait, "graceful-timeout", time.Second * 15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
+	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
 
 	r := mux.NewRouter()
@@ -25,8 +24,8 @@ func main() {
 	http.Handle("/", r)
 
 	srv := &http.Server{
-		Handler:      r,
-		Addr:         "127.0.0.1:8000",
+		Handler: r,
+		Addr:    "127.0.0.1:8000",
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
@@ -34,6 +33,7 @@ func main() {
 
 	// Run our server in a goroutine so that it doesn't block.
 	go func() {
+		log.Println("starting category server...")
 		if err := srv.ListenAndServe(); err != nil {
 			log.Println(err)
 		}
